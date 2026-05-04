@@ -16,15 +16,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { QiniuService } from './qiniu.service';
 import { GetUploadTokenDto, UploadFileDto, DeleteFileDto } from './dto/upload.dto';
 
-interface MulterFile {
-  fieldname: string;
-  originalname: string;
-  encoding: string;
-  mimetype: string;
-  buffer: Buffer;
-  size: number;
-}
-
 @Controller('qiniu')
 export class QiniuController {
   constructor(private readonly qiniuService: QiniuService) {}
@@ -42,7 +33,7 @@ export class QiniuController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: MulterFile, @Body() dto: UploadFileDto) {
+  async uploadFile(@UploadedFile() file: Express.Multer.File, @Body() dto: UploadFileDto) {
     if (!file) {
       throw new BadRequestException('请上传文件');
     }
